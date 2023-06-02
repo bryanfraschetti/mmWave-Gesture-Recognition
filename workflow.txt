@@ -1,0 +1,4 @@
+Workflow:
+1. Record data in mmwave using cfg
+2. Parse using mmwave provided parser
+3. Use csv splitter to split into trials
