@@ -115,15 +115,20 @@ while (totalBytesParsed < readNumBytes):
             democsvfile = open('mmw_demo_output.csv', 'w', newline='')                
             demoOutputWriter = csv.writer(democsvfile, delimiter=',',
                                     quotechar='', quoting=csv.QUOTE_NONE)                                    
-            demoOutputWriter.writerow(["frame","DetObj#","x","y","z","v","snr","noise"])            
+            demoOutputWriter.writerow(["frame","DetObj#","x","y","z","v","range", "azimuth", "elevation", "snr","noise"])            
             
         for obj in range(numDetObj):
-            demoOutputWriter.writerow([numFramesParsed-1, obj, detectedX_array[obj],\
-                                           detectedY_array[obj],\
-                                           detectedZ_array[obj],\
-                                           detectedV_array[obj],\
-                                           detectedSNR_array[obj],\
-                                           detectedNoise_array[obj]])
+            demoOutputWriter.writerow([numFramesParsed-1, obj,
+                                            detectedX_array[obj],\
+                                            detectedY_array[obj],\
+                                            detectedZ_array[obj],\
+                                            detectedV_array[obj],\
+                                            detectedRange_array[obj],  \
+                                            detectedAzimuth_array[obj],  \
+                                            detectedElevation_array[obj],  \
+                                            detectedSNR_array[obj],\
+                                            detectedNoise_array[obj]
+                                        ])
 
         
     else: 

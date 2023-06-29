@@ -11,51 +11,47 @@ from colorama import Fore
 
 colorama_init()
 
-if len(sys.argv) < 2:
-    raise Exception(Fore.RED + "Provide the correct number of arguments")
-else:
-    print(Fore.YELLOW + "First argument is file to be read, second is new file" + Fore.RESET)
-    
-    fileName = sys.argv[1]
-    if not os.path.exists(fileName) or fileName[len(fileName)-3:]!='csv':
-        raise Exception(Fore.RED + "Provide full relative path of a file that exists and is a .csv")
+# fileName = "data (csv)/optVelRes/kickForward/kickForward.csv"
+# fileName = "data (csv)/optVelRes/sidewaysWalking/sidewaysWalking.csv"
+# fileName = "data (csv)/optVelRes/kickSideways/kickSideways.csv"
+# fileName = "data (csv)/optVelRes/forwardWalking/forwardWalking.csv"
+fileName = "data (csv)/optVelRes/none/none.csv"
 
-    try:
-        newFileLocation = sys.argv[3]
-        if newFileLocation == "pos":
-            newFileLocation = "data (csv)/optPosRes/"
-        else:
-            newFileLocation = "data (csv)/optVelRes/"
-    except:
-        print(Fore.YELLOW + "Assuming default mode (optimized velocity cfg)" + Fore.RESET)
+
+
+# fileName = "data (csv)/optVelRes/none/noGesture.csv"
+
+try:
+    newFileLocation = sys.argv[2]
+    if newFileLocation == "pos":
+        newFileLocation = "data (csv)/optPosRes/"
+    else:
         newFileLocation = "data (csv)/optVelRes/"
+except:
+    print(Fore.YELLOW + "Assuming default mode (optimized velocity cfg)" + Fore.RESET)
+    newFileLocation = "data (csv)/optVelRes/"
 
-    newFilePrefix = sys.argv[2]
-    if newFilePrefix not in os.listdir(newFileLocation):
-        os.makedirs(newFileLocation + newFilePrefix)
-    newFileLocation = newFileLocation + newFilePrefix + "/"
+newFilePrefix = sys.argv[1]
+if newFilePrefix not in os.listdir(newFileLocation):
+    os.makedirs(newFileLocation + newFilePrefix)
+newFileLocation = newFileLocation + newFilePrefix + "/"
 
-    file = open(fileName)
-    listOfLines = file.readlines()
-    listOfLines.pop(0) # remove title/header line
-    
-    TrialIdx=0
-    lastModulo = -1
-    for i in range(len(listOfLines)):
-        line_i = listOfLines[i].split(',')
-        if(int(line_i[0]) % 60 == 0 and line_i[0]!=lastModulo):
-            TrialIdx = TrialIdx + 1
+file = open(fileName)
+listOfLines = file.readlines()
+file.close()
+
+TrialIdx=0
+for i in range(len(listOfLines)):
+    line_i = listOfLines[i].split(',')
+    if(line_i[0] == '0' and (line_i[1] == '0' or line_i[1] == "None")):
+        TrialIdx = TrialIdx + 1
+        try:
             try:
-                try:
-                    newFile.close()
-                except:
-                    pass
-                lastModulo = line_i[0]
-                newFile = open(newFileLocation + newFilePrefix + str(TrialIdx) + '.csv', 'x')
+                newFile.close()
             except:
-                raise Exception(Fore.RED + "That gesture data already exists in this location. Please delete it or change it's location")
-        newFile.write(listOfLines[i])
-
-        
-        
+                pass
+            newFile = open(newFileLocation + newFilePrefix + str(TrialIdx) + '.csv', 'x')
+        except:
+            raise Exception(Fore.RED + "That gesture data already exists in this location. Please delete it or change it's location")
+    newFile.write(listOfLines[i])
 
